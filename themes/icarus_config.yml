@@ -45,9 +45,15 @@ search:
 
 # Comment
 comment:
-    disqus: goshin # enter disqus shortname here
+    disqus: # enter disqus shortname here
     duoshuo: # enter duoshuo shortname here
     youyan: # enter youyan uid here
+    gitment:
+        owner: Goshin #your github ID
+        repo: Goshin.github.io #the repo to store comments
+        #Register an OAuth application, and you will get a client ID and a client secret.
+        client_id: d1395db214bb39c02c97 #your client ID
+        client_secret: ef8966f1eac5b1218f8620a2e31623e0d04cf5fb #your client secret
 
 # Share
 share: default # options: jiathis, bdshare, addtoany, default
