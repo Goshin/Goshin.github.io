@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Hexo 下实现双语双栏对照模板 | Goshin&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="在 Hexo 中如果博客有双语写作的需求，其自带的国际化功能中通常的实践是为每一篇文章和主题模板都撰写对应的多语言副本，生成后通过点击链接进行整站语言切换。 如果只是有零星几篇双语文章，这样的成本未免有些大了，之前看到过翻译文章双栏对照的排版，觉得非常适合双语对照展示的场景，但 Google 一圈后并没有发现 Hexo 下有现成的模板，因此自己动手实现一下，顺便可以学习下 Hexo 模板的开发。">
+<meta name="keywords" content="Front-End, Hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo 下实现双语双栏对照模板">
+<meta property="og:url" content="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/index.html">
+<meta property="og:site_name" content="Goshin&#39;s Blog">
+<meta property="og:description" content="在 Hexo 中如果博客有双语写作的需求，其自带的国际化功能中通常的实践是为每一篇文章和主题模板都撰写对应的多语言副本，生成后通过点击链接进行整站语言切换。 如果只是有零星几篇双语文章，这样的成本未免有些大了，之前看到过翻译文章双栏对照的排版，觉得非常适合双语对照展示的场景，但 Google 一圈后并没有发现 Hexo 下有现成的模板，因此自己动手实现一下，顺便可以学习下 Hexo 模板的开发。">
+<meta property="og:image" content="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/logo.png">
+<meta property="og:updated_time" content="2018-03-11T08:48:29.021Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo 下实现双语双栏对照模板">
+<meta name="twitter:description" content="在 Hexo 中如果博客有双语写作的需求，其自带的国际化功能中通常的实践是为每一篇文章和主题模板都撰写对应的多语言副本，生成后通过点击链接进行整站语言切换。 如果只是有零星几篇双语文章，这样的成本未免有些大了，之前看到过翻译文章双栏对照的排版，觉得非常适合双语对照展示的场景，但 Google 一圈后并没有发现 Hexo 下有现成的模板，因此自己动手实现一下，顺便可以学习下 Hexo 模板的开发。">
+<meta name="twitter:image" content="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/logo.png">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-80073046-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                
+                <span class="site-title">Goshin&#39;s Blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="https://avatars2.githubusercontent.com/u/10056397?v=3&amp;s=460" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="https://avatars2.githubusercontent.com/u/10056397?v=3&amp;s=460" />
+            <h2 id="name">Goshin</h2>
+            <h3 id="title">Android Developer</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>Canton, China</span>
+            <a id="follow" target="_blank" href="https://github.com/Goshin/">FOLLOW</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                4
+                <span>posts</span>
+            </div>
+            <div class="article-info-block">
+                9
+                <span>tags</span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Bilingual-Template-in-Hexo" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            
+	
+		<img src="/2018/01/19/Bilingual-Template-in-Hexo/logo.png" class="article-banner" />
+	
+
+
+
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Hexo 下实现双语双栏对照模板
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/01/19/Bilingual-Template-in-Hexo/">
+            <time datetime="2018-01-19T14:46:29.000Z" itemprop="datePublished">2018-01-19</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Front-End/">Front-End</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Front-End-Hexo/">Front-End, Hexo</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>在 Hexo 中如果博客有双语写作的需求，其自带的国际化功能中通常的实践是为每一篇文章和主题模板都撰写对应的多语言副本，生成后通过点击链接进行整站语言切换。</p>
+<p>如果只是有零星几篇双语文章，这样的成本未免有些大了，之前看到过翻译文章双栏对照的排版，觉得非常适合双语对照展示的场景，但 Google 一圈后并没有发现 Hexo 下有现成的模板，因此自己动手实现一下，顺便可以学习下 Hexo 模板的开发。</p>
+<h2 id="文章布局-Layout"><a href="#文章布局-Layout" class="headerlink" title="文章布局 Layout"></a>文章布局 Layout</h2><p>Hexo 在创建新文章的时候可以指定文章的布局 layout，在生成时 Hexo 会调用主题 <code>layout</code> 目录下的对应 layout 文件进行文章的渲染。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> hexo new [layout] &lt;title&gt; # 或新建后在文档中指定 layout 项</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>因此首先需要在 theme 中新建一个 layout 文件，可以从原有模板的文章默认 layout 复制一份作为基础对其进行修改。比如我这里复制后的路径是 <code>themes/icarus/layout/bil-post.ejs</code> 。</p>
+<p>这样以后新建双栏对照文章只需：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> hexo new bil-post &lt;title&gt;</span><br></pre></td></tr></table></figure>
+<p>接着修改复制得到的 layout，将原本引入文章文本的地方：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%-</span> <span class="attr">post.content</span> %&gt;</span></span><br></pre></td></tr></table></figure>
+<p>修改为：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;% post.column = post.content.split('&lt;!--second-column--&gt;')  %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"article-bil-column bil-first-column"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">%-</span> <span class="attr">post.column</span>[<span class="attr">0</span>] %&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"article-bil-column bil-second-column"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">%-</span> <span class="attr">post.column</span>[<span class="attr">1</span>] %&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">%-</span> <span class="attr">css</span>('<span class="attr">css</span>/<span class="attr">bilingual</span>') %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">%-</span> <span class="attr">js</span>('<span class="attr">js</span>/<span class="attr">bilingual</span>') %&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里将文章文本内容按标记 <code>&lt;!--second-column--&gt;</code> 分割，放在左右两栏的两个 <code>div</code> 中，再引入样式和脚本。</p>
+<p>接着新建一个样式文件 <code>themes/icarus/source/css/bilingual.styl</code>，定义两栏的样式：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.article-bil-column</span></span><br><span class="line">    <span class="selector-tag">display</span>: <span class="selector-tag">inline</span></span><br><span class="line">    <span class="selector-tag">float</span>: <span class="selector-tag">left</span></span><br><span class="line">    <span class="selector-tag">width</span>: <span class="selector-tag">calc</span>(50% <span class="selector-tag">-</span> 10<span class="selector-tag">px</span>) <span class="comment">/* 每栏各占宽 50%， 边界预留 10px 空白 */</span></span><br><span class="line">    &amp;<span class="selector-class">.bil-first-column</span></span><br><span class="line">        <span class="selector-tag">padding</span>: 0 10<span class="selector-tag">px</span> 0 0 </span><br><span class="line">    &amp;<span class="selector-class">.bil-second-column</span></span><br><span class="line">        <span class="selector-tag">padding</span>: 0 0 0 10<span class="selector-tag">px</span></span><br></pre></td></tr></table></figure>
+<p>这样两栏就可以并排显示了。</p>
+<h2 id="同步滚动"><a href="#同步滚动" class="headerlink" title="同步滚动"></a>同步滚动</h2><p>实现双栏并排显示后还有一个问题需要解决。两种语言下的同一段话字数往往不同，所占用的版面行数会有所差距，篇幅一长两边便对应不上，影响对照的效果。因此需要两边内容上的同步滚动。</p>
+<p>实现同步滚动有两种思路，第一种可以考虑令两边对应段落高度保持一致，略微扩充其中较短的一段，这种方式实现比较简单，但要求两边段落数量一致。第二种方式给每一段添加锚点标记，在页面滚动时，用 JS 控制一组锚点位置对齐，滚动效果很酷炫，但实现较为复杂，且需要额外考虑一些兼容问题。这里先选择实现第一种。</p>
+<p>新建 <code>themes/icarus/source/js/bilingual.js</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">$</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> leftParagraphs = $(<span class="string">'.article-entry .bil-first-column'</span>).find(<span class="string">'p, h1, h2, h3, h4, h5, h6'</span>);</span><br><span class="line">    <span class="keyword">var</span> rightParagraphs = $(<span class="string">'.article-entry .bil-second-column'</span>).find(<span class="string">'p, h1, h2, h3, h4, h5, h6'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> align = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">/* 如果页面宽度大于 800px，进行段落对齐，见下一节 */</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">window</span>.matchMedia(<span class="string">'(min-width: 800px)'</span>).matches) &#123;</span><br><span class="line">            leftParagraphs.each(<span class="function">(<span class="params">i, thiz</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">var</span> left = $(thiz);</span><br><span class="line">                <span class="keyword">var</span> right = rightParagraphs.eq(i);</span><br><span class="line"></span><br><span class="line">                left.removeAttr(<span class="string">'style'</span>), right.removeAttr(<span class="string">'style'</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">/* 取对应两段高度的最大值 */</span></span><br><span class="line">                <span class="keyword">var</span> maxHeight = <span class="built_in">Math</span>.max(left.height(), right.height());</span><br><span class="line">                left.height(maxHeight), right.height(maxHeight);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            leftParagraphs.removeAttr(<span class="string">'style'</span>), rightParagraphs.removeAttr(<span class="string">'style'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(leftParagraphs.size() == rightParagraphs.size()) &#123;</span><br><span class="line">        <span class="keyword">var</span> resizeHandler = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">/* 监听窗口大小变化 */</span></span><br><span class="line">        $(<span class="built_in">window</span>).resize(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(resizeHandler) &#123;</span><br><span class="line">                clearTimeout(resizeHandler);</span><br><span class="line">            &#125;</span><br><span class="line">            resizeHandler = setTimeout(align, <span class="number">50</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">if</span>($(<span class="string">'#main img'</span>).size()) &#123;</span><br><span class="line">            $(<span class="string">'#main img'</span>).load(align);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $(align);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)(jQuery);</span><br></pre></td></tr></table></figure>
+<h2 id="响应式布局"><a href="#响应式布局" class="headerlink" title="响应式布局"></a>响应式布局</h2><p>在手机等屏幕较小的设备中，如果保持双栏显示会使正文栏变得很窄而影响阅读，解决办法是根据设备对布局做自适应处理，在屏幕宽度受限的情况下单栏平铺显示。</p>
+<p>CSS 提供了媒体查询的接口，可用于为不同宽度的设备设置不同的样式，我使用的主题也定义了一些媒体类型的变量，因此只需在上面定义的样式基础上稍加扩展即可：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">import</span> <span class="string">"_variables"</span></span><br><span class="line"></span><br><span class="line">.article-bil-column</span><br><span class="line">    display: inline</span><br><span class="line">    float: left</span><br><span class="line">    @media mq-normal</span><br><span class="line">        width: calc(<span class="number">50%</span> - <span class="number">10px</span>)</span><br><span class="line">        &amp;.bil-first-column</span><br><span class="line">            padding: <span class="number">0</span> <span class="number">10px</span> <span class="number">0</span> <span class="number">0</span></span><br><span class="line">        &amp;.bil-second-column</span><br><span class="line">            padding: <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">10px</span></span><br><span class="line">    @media mq-tablet</span><br><span class="line">        width: calc(<span class="number">50%</span> - <span class="number">10px</span>)</span><br><span class="line">        &amp;.bil-first-column</span><br><span class="line">            padding: <span class="number">0</span> <span class="number">10px</span> <span class="number">0</span> <span class="number">0</span> </span><br><span class="line">        &amp;.bil-second-column</span><br><span class="line">            padding: <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">10px</span></span><br><span class="line">    @media mq-mobile</span><br><span class="line">        width: <span class="number">100%</span></span><br><span class="line">    @media mq-mini</span><br><span class="line">        width: <span class="number">100%</span></span><br></pre></td></tr></table></figure>
+<p>再根据所使用主题的需要，加上对页面的其他元素的调整：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#main</span></span><br><span class="line">    <span class="selector-tag">width</span>: 100%</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 隐藏侧边信息卡片 */</span></span><br><span class="line"><span class="selector-tag">aside</span><span class="selector-id">#profile</span></span><br><span class="line">    <span class="selector-tag">display</span>: <span class="selector-tag">none</span> </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 平铺右边文章列表栏 */</span></span><br><span class="line"><span class="selector-tag">aside</span><span class="selector-id">#sidebar</span></span><br><span class="line">    <span class="selector-tag">display</span>: <span class="selector-tag">block</span></span><br><span class="line">    <span class="selector-tag">width</span>: 100%;</span><br></pre></td></tr></table></figure>
+<p>效果：</p>
+<p><img src="/2018/01/19/Bilingual-Template-in-Hexo/responsive.gif" alt="Responsive"></p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><blockquote>
+<p><a href="/misc/Bilingual-Template-Test/">Bilingual Template Test</a></p>
+</blockquote>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/" data-id="cjelhhwvd0000e4nkya536nwb" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">Android 响应式编程的未来展望：RxJava 2 版本前瞻</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+        <section id="comments">
+    <div id="lv-container" data-id="city" data-uid=MTAyMC8zMzM4Mi85OTM4></div>
+</section>
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">recent</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/01/19/Bilingual-Template-in-Hexo/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/2018/01/19/Bilingual-Template-in-Hexo/logo.png)" alt="Hexo 下实现双语双栏对照模板" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Front-End/">Front-End</a></p>
+                            <p class="item-title"><a href="/2018/01/19/Bilingual-Template-in-Hexo/" class="title">Hexo 下实现双语双栏对照模板</a></p>
+                            <p class="item-date"><time datetime="2018-01-19T14:46:29.000Z" itemprop="datePublished">2018-01-19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/logo.png)" alt="Android 响应式编程的未来展望：RxJava 2 版本前瞻" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Android/">Android</a></p>
+                            <p class="item-title"><a href="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" class="title">Android 响应式编程的未来展望：RxJava 2 版本前瞻</a></p>
+                            <p class="item-date"><time datetime="2017-01-18T05:53:25.000Z" itemprop="datePublished">2017-01-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/07/14/Black-box-test-using-Xposed/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/2016/07/14/Black-box-test-using-Xposed/logo.png)" alt="使用 Xposed 进行黑盒测试" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Android/">Android</a></p>
+                            <p class="item-title"><a href="/2016/07/14/Black-box-test-using-Xposed/" class="title">使用 Xposed 进行黑盒测试</a></p>
+                            <p class="item-date"><time datetime="2016-07-14T04:02:08.000Z" itemprop="datePublished">2016-07-14</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/06/27/using-new-google-sheets-api/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/2016/06/27/using-new-google-sheets-api/cover.png)" alt="【译】如何应用最新版的谷歌表格 API" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2016/06/27/using-new-google-sheets-api/" class="title">【译】如何应用最新版的谷歌表格 API</a></p>
+                            <p class="item-date"><time datetime="2016-06-27T14:45:55.000Z" itemprop="datePublished">2016-06-27</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Front-End/">Front-End</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tags</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Front-End-Hexo/">Front-End, Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google/">Google</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google-API/">Google API</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google-Sheets/">Google Sheets</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Reactive/">Reactive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Xposed/">Xposed</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Front-End-Hexo/" style="font-size: 10px;">Front-End, Hexo</a> <a href="/tags/Google/" style="font-size: 10px;">Google</a> <a href="/tags/Google-API/" style="font-size: 10px;">Google API</a> <a href="/tags/Google-Sheets/" style="font-size: 10px;">Google Sheets</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Reactive/" style="font-size: 10px;">Reactive</a> <a href="/tags/Xposed/" style="font-size: 10px;">Xposed</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 John Chong<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+    
+    
+    <!-- 来必力City版安装代码 -->
+    <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+
+         if (typeof LivereTower === 'function') { return; }
+
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+    </script>
+  <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+  <!-- City版安装代码已完成 -->
+
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

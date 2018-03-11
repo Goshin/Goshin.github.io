@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>使用 Xposed 进行黑盒测试 | Goshin&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="现在的 Android App 在编译发行时，一般都会混淆代码，或者加密保护 dex，虽然能够有效防止打包客反编译修改后重新发行，但也给我们个人学习 Dalvik 指令和理解程序逻辑带来了很大麻烦。在做静态分析时，面对茫茫一片混淆后无规则的类名，往往难以下手，只能停留在一些 APP 的常见入口，无法继续深入。 Xposed 是 Android 上非常有名的一个 hook 框架。通过 Xposed，">
+<meta name="keywords" content="Android,Java,Xposed">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Xposed 进行黑盒测试">
+<meta property="og:url" content="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/index.html">
+<meta property="og:site_name" content="Goshin&#39;s Blog">
+<meta property="og:description" content="现在的 Android App 在编译发行时，一般都会混淆代码，或者加密保护 dex，虽然能够有效防止打包客反编译修改后重新发行，但也给我们个人学习 Dalvik 指令和理解程序逻辑带来了很大麻烦。在做静态分析时，面对茫茫一片混淆后无规则的类名，往往难以下手，只能停留在一些 APP 的常见入口，无法继续深入。 Xposed 是 Android 上非常有名的一个 hook 框架。通过 Xposed，">
+<meta property="og:image" content="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/logo.png">
+<meta property="og:updated_time" content="2018-01-19T11:31:26.128Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 Xposed 进行黑盒测试">
+<meta name="twitter:description" content="现在的 Android App 在编译发行时，一般都会混淆代码，或者加密保护 dex，虽然能够有效防止打包客反编译修改后重新发行，但也给我们个人学习 Dalvik 指令和理解程序逻辑带来了很大麻烦。在做静态分析时，面对茫茫一片混淆后无规则的类名，往往难以下手，只能停留在一些 APP 的常见入口，无法继续深入。 Xposed 是 Android 上非常有名的一个 hook 框架。通过 Xposed，">
+<meta name="twitter:image" content="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/logo.png">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-80073046-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                
+                <span class="site-title">Goshin&#39;s Blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="https://avatars2.githubusercontent.com/u/10056397?v=3&amp;s=460" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="https://avatars2.githubusercontent.com/u/10056397?v=3&amp;s=460" />
+            <h2 id="name">Goshin</h2>
+            <h3 id="title">Android Developer</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>Canton, China</span>
+            <a id="follow" target="_blank" href="https://github.com/Goshin/">FOLLOW</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                4
+                <span>posts</span>
+            </div>
+            <div class="article-info-block">
+                9
+                <span>tags</span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Black-box-test-using-Xposed" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            使用 Xposed 进行黑盒测试
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2016/07/14/Black-box-test-using-Xposed/">
+            <time datetime="2016-07-14T04:02:08.000Z" itemprop="datePublished">2016-07-14</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Android/">Android</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Android/">Android</a>, <a class="tag-link" href="/tags/Java/">Java</a>, <a class="tag-link" href="/tags/Xposed/">Xposed</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>现在的 Android App 在编译发行时，一般都会混淆代码，或者加密保护 dex，虽然能够有效防止打包客反编译修改后重新发行，但也给我们个人学习 Dalvik 指令和理解程序逻辑带来了很大麻烦。在做静态分析时，面对茫茫一片混淆后无规则的类名，往往难以下手，只能停留在一些 APP 的常见入口，无法继续深入。</p>
+<p>Xposed 是 Android 上非常有名的一个 hook 框架。通过 Xposed，可以轻松勾住 Java 层的所有方法。hook 的应用非常广泛，包括资源替换、系统优化、性能分析等，下面就与大家分享一下我利用 Xposed 分析混淆代码应用的一些心得。</p>
+<a id="more"></a>
+<h3 id="如何-hook"><a href="#如何-hook" class="headerlink" title="如何 hook"></a>如何 hook</h3><p>Xposed 替换了 <code>app_process (Zygote)</code>，将 Java 方法改为 Native 方法骗过虚拟机，从而拿到 Java 方法的代理权。所以首先得明白，Xposed 只能 hook Java 方法。虽然原理很复杂，但是 Xposed 提供给 module 开发者的 API 还是很简单方便的，请参考 Xposed repo 上的<a href="https://github.com/rovo89/XposedBridge/wiki/Development-tutorial" target="_blank" rel="noopener">指导</a>和完整的 <a href="http://api.xposed.info/reference/packages.html" target="_blank" rel="noopener">API 文档</a>，常见的使用如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Hook org.apache.http 包中的 HttpPost 请求 */</span></span><br><span class="line">XposedHelpers.findAndHookMethod(<span class="string">"org.apache.http.impl.client.AbstractHttpClient"</span>, loadPackageParam.classLoader, <span class="string">"execute"</span>, HttpUriRequest.class, <span class="keyword">new</span> XC_MethodHook() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!param.args[<span class="number">0</span>].getClass().getCanonicalName().contains(<span class="string">"HttpPost"</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        HttpPost request = (HttpPost) param.args[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">        String url = request.getURI().toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Xposed 通过 Java 虚拟机的反射 API来找目标类和方法，所以要<strong>注意你只能 hook 具体实现的方法</strong>，除此之外，交由子类实现的抽象方法、在子类中被重写且没有被调用的父类方法、和继承自父类但没有重写的子类方法，是不能 hook 的。虽然 Dalvik 有 <code>invoke-virtual</code> 指令，但实际虚拟机中对象的每个方法都是独立唯一的，与父类的方法没有链式调用的关系（，不过对象的构造方法和显式调用 <code>super()</code> 除外）。</p>
+<p>举一个实际中的例子，比如说你想 hook <code>java.net.HttpURLConnection</code> 的 <code>getInputStream()</code> 方法，来做一些流量统计或者内容嗅探等工作。一般来说是这样写的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 错误示范 */</span></span><br><span class="line">XposedHelpers.findAndHookMethod(<span class="string">"java.net.HttpURLConnection"</span>, loadPackageParam.classLoader, <span class="string">"getInputStream"</span>, <span class="keyword">new</span> XC_MethodHook() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="comment">/* Do something */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但这样会报错，Xposed 日志会显示找不到该方法。根据文档，这个 <code>getInputStream()</code> 方法是继承自它的父类 <code>java.net.URLConnection</code> 的方法，在 <code>java.net.HttpURLConnection</code> 中并没有重写。但如果将上面的目标类改成 <code>java.net.URLConnection</code> 依然会 hook 失败。原因请看下面 <code>java.net.URLConnection</code> 中 <code>getInputStream()</code> 部分的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Returns an &#123;<span class="doctag">@code</span> InputStream&#125; for reading data from the resource pointed by</span></span><br><span class="line"><span class="comment"> * this &#123;<span class="doctag">@code</span> URLConnection&#125;. It throws an UnknownServiceException by</span></span><br><span class="line"><span class="comment"> * default. This method must be overridden by its subclasses.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the InputStream to read data from.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment"> *             if no InputStream could be created.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> InputStream <span class="title">getInputStream</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> UnknownServiceException(<span class="string">"Does not support writing to the input stream"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出基类 <code>java.net.URLConnection</code> 并没有实现这个方法。在实际中，HTTP 请求的处理是由系统 framework 层中一些平台相关的实现类来具体实现的。</p>
+<p>所以应该 hook 实现类中的方法，具体如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> apiLevel = Build.VERSION.SDK_INT;</span><br><span class="line"><span class="comment">/* 自 Android 4.4 后改用 okhttp 实现，在 6.0 后包名有改动 */</span></span><br><span class="line"><span class="keyword">if</span> (apiLevel &gt;= <span class="number">23</span>) &#123;</span><br><span class="line">    XposedHelpers.findAndHookMethod(<span class="string">"com.android.okhttp.internal.huc.HttpURLConnectionImpl"</span>, loadPackageParam.classLoader, <span class="string">"getInputStream"</span>, URLGetInputStreamHook);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (apiLevel &gt;= <span class="number">19</span>) &#123;</span><br><span class="line">    XposedHelpers.findAndHookMethod(<span class="string">"com.android.okhttp.internal.http.HttpURLConnectionImpl"</span>, loadPackageParam.classLoader, <span class="string">"getInputStream"</span>, URLGetInputStreamHook);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    XposedHelpers.findAndHookMethod(<span class="string">"libcore.net.http.HttpURLConnectionImpl"</span>, loadPackageParam.classLoader, <span class="string">"getInputStream"</span>, URLGetInputStreamHook);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Hook-系统-API"><a href="#Hook-系统-API" class="headerlink" title="Hook 系统 API"></a>Hook 系统 API</h3><p>你可以 hook 一些敏感的系统 API，打印出参数和返回结果，从而获取到一些关键信息。</p>
+<p>比如说 HTTP 请求中的 payload、<code>startActivity()</code> 中传递的 Intent，块加密的密钥等敏感内容。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">XposedHelpers.findAndHookConstructor(<span class="string">"java.net.URL"</span>, loadPackageParam.classLoader, String.class, <span class="keyword">new</span> XC_MethodHook() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        String url = (String) param.args[<span class="number">0</span>];</span><br><span class="line">        log(<span class="string">"URL construct "</span> + url);</span><br><span class="line">        <span class="comment">/* 还可以通过修改参数或结果，改变应用逻辑 */</span></span><br><span class="line">        param.args[<span class="number">0</span>] = <span class="string">"http://www.baidu.com/"</span>;</span><br><span class="line">        log(<span class="string">"Change URL to "</span> + param.args[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="打印栈跟踪信息"><a href="#打印栈跟踪信息" class="headerlink" title="打印栈跟踪信息"></a>打印栈跟踪信息</h3><p>新建一个 <code>Exception</code>，把当前应用方法调用的栈跟踪信息打印出来。对于混淆后的代码，这招相当有用，可以快速定位反汇编后的关键点，理清类之间调用关系，对理解程序的逻辑很有帮助。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">XposedHelpers.findAndHookConstructor(<span class="string">"java.net.URL"</span>, loadPackageParam.classLoader, String.class, <span class="keyword">new</span> XC_MethodHook() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="comment">/* 打印调用栈跟踪信息 */</span></span><br><span class="line">        <span class="keyword">new</span> Exception(<span class="string">"new URL"</span>).printStackTrace();</span><br><span class="line">        <span class="comment">/* 记录到 Xposed 日志 */</span></span><br><span class="line">        XposedBridge.log(<span class="keyword">new</span> Exception(<span class="string">"new URL"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Hook-异常信息"><a href="#Hook-异常信息" class="headerlink" title="Hook 异常信息"></a>Hook 异常信息</h3><p>应用运行过程中产生的异常往往包含了一些重要信息，而这些异常通常会被捕获且不会将异常 log 内容打印出来。这时就可以通过 Xposed 来 hook 异常的构造方法，得到异常跟踪信息。Java 的异常类通过继承来实现异常的层级化归类，且子类在构造时会调用父类的构造方法，所以我们可以通过 hook 异常基类来实现对一大类异常的捕获，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">XposedBridge.hookAllConstructors(IOException.class, <span class="keyword">new</span> XC_MethodHook() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">afterHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="comment">/* 所有网络 IO，本地 IO 等 IO 错误都会被捕获 */</span></span><br><span class="line">        XposedBridge.log((Throwable) param.thisObject);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>暂时先记录这么多，以后有想起什么再另行补充，欢迎大家留言指正。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/" data-id="cjelhhwwc0008e4nkpz4sj6ga" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    Android 响应式编程的未来展望：RxJava 2 版本前瞻
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2016/06/27/using-new-google-sheets-api/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">【译】如何应用最新版的谷歌表格 API</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+        <section id="comments">
+    <div id="lv-container" data-id="city" data-uid=MTAyMC8zMzM4Mi85OTM4></div>
+</section>
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">recent</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/01/19/Bilingual-Template-in-Hexo/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/2018/01/19/Bilingual-Template-in-Hexo/logo.png)" alt="Hexo 下实现双语双栏对照模板" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Front-End/">Front-End</a></p>
+                            <p class="item-title"><a href="/2018/01/19/Bilingual-Template-in-Hexo/" class="title">Hexo 下实现双语双栏对照模板</a></p>
+                            <p class="item-date"><time datetime="2018-01-19T14:46:29.000Z" itemprop="datePublished">2018-01-19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/logo.png)" alt="Android 响应式编程的未来展望：RxJava 2 版本前瞻" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Android/">Android</a></p>
+                            <p class="item-title"><a href="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" class="title">Android 响应式编程的未来展望：RxJava 2 版本前瞻</a></p>
+                            <p class="item-date"><time datetime="2017-01-18T05:53:25.000Z" itemprop="datePublished">2017-01-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/07/14/Black-box-test-using-Xposed/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/2016/07/14/Black-box-test-using-Xposed/logo.png)" alt="使用 Xposed 进行黑盒测试" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Android/">Android</a></p>
+                            <p class="item-title"><a href="/2016/07/14/Black-box-test-using-Xposed/" class="title">使用 Xposed 进行黑盒测试</a></p>
+                            <p class="item-date"><time datetime="2016-07-14T04:02:08.000Z" itemprop="datePublished">2016-07-14</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/06/27/using-new-google-sheets-api/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/2016/06/27/using-new-google-sheets-api/cover.png)" alt="【译】如何应用最新版的谷歌表格 API" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2016/06/27/using-new-google-sheets-api/" class="title">【译】如何应用最新版的谷歌表格 API</a></p>
+                            <p class="item-date"><time datetime="2016-06-27T14:45:55.000Z" itemprop="datePublished">2016-06-27</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Front-End/">Front-End</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tags</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Front-End-Hexo/">Front-End, Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google/">Google</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google-API/">Google API</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google-Sheets/">Google Sheets</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Reactive/">Reactive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Xposed/">Xposed</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Front-End-Hexo/" style="font-size: 10px;">Front-End, Hexo</a> <a href="/tags/Google/" style="font-size: 10px;">Google</a> <a href="/tags/Google-API/" style="font-size: 10px;">Google API</a> <a href="/tags/Google-Sheets/" style="font-size: 10px;">Google Sheets</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Reactive/" style="font-size: 10px;">Reactive</a> <a href="/tags/Xposed/" style="font-size: 10px;">Xposed</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 John Chong<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+    
+    
+    <!-- 来必力City版安装代码 -->
+    <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+
+         if (typeof LivereTower === 'function') { return; }
+
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+    </script>
+  <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+  <!-- City版安装代码已完成 -->
+
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
