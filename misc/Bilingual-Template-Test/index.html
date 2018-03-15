@@ -254,7 +254,7 @@ ga('send', 'pageview');
 
 </div>
 
-    <a data-url="https://goshin.github.io/misc/Bilingual-Template-Test/index.html" data-id="cjemsxq490003wjnkuy68k5tw" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://goshin.github.io/misc/Bilingual-Template-Test/index.html" data-id="cjerzposo0010xankhmt1ex98" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -322,8 +322,6 @@ ga('send', 'pageview');
 
             
     
-        <a href="https://goshin.github.io/misc/Bilingual-Template-Test/index.html#comments" class="article-comment-link">Comments</a>
-    
 
         </footer>
     </div>
@@ -337,9 +335,11 @@ ga('send', 'pageview');
     
     
         <section id="comments">
-    <div id="lv-container" data-id="city" data-uid=MTAyMC8zMzM4Mi85OTM4></div>
+    <div id="valine-thread"></div>
+
 </section>
     
+
 
 
 
@@ -360,7 +360,7 @@ ga('send', 'pageview');
                             <a href="/2018/01/19/Bilingual-Template-in-Hexo/" class="thumbnail">
     
     
-        <span style="background-image:url(/2018/01/19/Bilingual-Template-in-Hexo/logo.png)" alt="Hexo 下实现双语双栏对照模板" class="thumbnail-image"></span>
+        <span style="background-image:url(/2018/01/19/Bilingual-Template-in-Hexo/thumbnail.jpg)" alt="Hexo 下实现双语双栏对照模板" class="thumbnail-image"></span>
     
 </a>
 
@@ -379,7 +379,7 @@ ga('send', 'pageview');
                             <a href="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" class="thumbnail">
     
     
-        <span style="background-image:url(/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/logo.png)" alt="Android 响应式编程的未来展望：RxJava 2 版本前瞻" class="thumbnail-image"></span>
+        <span style="background-image:url(/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/thumbnail.jpg)" alt="Android 响应式编程的未来展望：RxJava 2 版本前瞻" class="thumbnail-image"></span>
     
 </a>
 
@@ -398,7 +398,7 @@ ga('send', 'pageview');
                             <a href="/2016/07/14/Black-box-test-using-Xposed/" class="thumbnail">
     
     
-        <span style="background-image:url(/2016/07/14/Black-box-test-using-Xposed/logo.png)" alt="使用 Xposed 进行黑盒测试" class="thumbnail-image"></span>
+        <span style="background-image:url(/2016/07/14/Black-box-test-using-Xposed/thumbnail.jpg)" alt="使用 Xposed 进行黑盒测试" class="thumbnail-image"></span>
     
 </a>
 
@@ -417,7 +417,7 @@ ga('send', 'pageview');
                             <a href="/2016/06/27/using-new-google-sheets-api/" class="thumbnail">
     
     
-        <span style="background-image:url(/2016/06/27/using-new-google-sheets-api/cover.png)" alt="【译】如何应用最新版的谷歌表格 API" class="thumbnail-image"></span>
+        <span style="background-image:url(/2016/06/27/using-new-google-sheets-api/thumbnail.jpg)" alt="【译】如何应用最新版的谷歌表格 API" class="thumbnail-image"></span>
     
 </a>
 
@@ -502,23 +502,14 @@ ga('send', 'pageview');
 </footer>
         
     
-    
-    <!-- 来必力City版安装代码 -->
-    <script type="text/javascript">
-     (function(d, s) {
-         var j, e = d.getElementsByTagName(s)[0];
-
-         if (typeof LivereTower === 'function') { return; }
-
-         j = d.createElement(s);
-         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-         j.async = true;
-
-         e.parentNode.insertBefore(j, e);
-     })(document, 'script');
+    <script>
+        window.VALINECONFIG = {
+            el: '#valine-thread' ,
+            app_secret: '7f7ac953577f4e4194d89fd02660fbdb',
+            app_key: 'kid_ByJwtpDYf',
+        };
     </script>
-  <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
-  <!-- City版安装代码已完成 -->
+    <script src="//cdn.jsdelivr.net/gh/Goshin/Valine-Kinvey@k-1.0.2/dist/Valine-loader.min.js"></script>
 
 
 

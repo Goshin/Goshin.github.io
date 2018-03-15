@@ -12,12 +12,12 @@
 <meta property="og:url" content="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/index.html">
 <meta property="og:site_name" content="Goshin&#39;s Blog">
 <meta property="og:description" content="在 Hexo 中如果博客有双语写作的需求，其自带的国际化功能中通常的实践是为每一篇文章和主题模板都撰写对应的多语言副本，生成后通过点击链接进行整站语言切换。 如果只是有零星几篇双语文章，这样的成本未免有些大了，之前看到过翻译文章双栏对照的排版，觉得非常适合双语对照展示的场景，但 Google 一圈后并没有发现 Hexo 下有现成的模板，因此自己动手实现一下，顺便可以学习下 Hexo 模板的开发。">
-<meta property="og:image" content="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/logo.png">
-<meta property="og:updated_time" content="2018-03-11T08:48:29.021Z">
+<meta property="og:image" content="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/thumbnail.jpg">
+<meta property="og:updated_time" content="2018-03-15T10:31:41.996Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo 下实现双语双栏对照模板">
 <meta name="twitter:description" content="在 Hexo 中如果博客有双语写作的需求，其自带的国际化功能中通常的实践是为每一篇文章和主题模板都撰写对应的多语言副本，生成后通过点击链接进行整站语言切换。 如果只是有零星几篇双语文章，这样的成本未免有些大了，之前看到过翻译文章双栏对照的排版，觉得非常适合双语对照展示的场景，但 Google 一圈后并没有发现 Hexo 下有现成的模板，因此自己动手实现一下，顺便可以学习下 Hexo 模板的开发。">
-<meta name="twitter:image" content="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/logo.png">
+<meta name="twitter:image" content="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/thumbnail.jpg">
     
 
     
@@ -183,7 +183,7 @@ ga('send', 'pageview');
         
             
 	
-		<img src="/2018/01/19/Bilingual-Template-in-Hexo/logo.png" class="article-banner" />
+		<img src="/2018/01/19/Bilingual-Template-in-Hexo/banner.jpg" class="article-banner" />
 	
 
 
@@ -269,7 +269,7 @@ ga('send', 'pageview');
 
 </div>
 
-    <a data-url="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/" data-id="cjemsxq430002wjnkoyihww4y" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/" data-id="cjerzpoqo0007xanknohx1zcq" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -337,8 +337,6 @@ ga('send', 'pageview');
 
             
     
-        <a href="https://goshin.github.io/2018/01/19/Bilingual-Template-in-Hexo/#comments" class="article-comment-link">Comments</a>
-    
 
         </footer>
     </div>
@@ -362,9 +360,11 @@ ga('send', 'pageview');
     
     
         <section id="comments">
-    <div id="lv-container" data-id="city" data-uid=MTAyMC8zMzM4Mi85OTM4></div>
+    <div id="valine-thread"></div>
+
 </section>
     
+
 
 </section>
             
@@ -383,7 +383,7 @@ ga('send', 'pageview');
                             <a href="/2018/01/19/Bilingual-Template-in-Hexo/" class="thumbnail">
     
     
-        <span style="background-image:url(/2018/01/19/Bilingual-Template-in-Hexo/logo.png)" alt="Hexo 下实现双语双栏对照模板" class="thumbnail-image"></span>
+        <span style="background-image:url(/2018/01/19/Bilingual-Template-in-Hexo/thumbnail.jpg)" alt="Hexo 下实现双语双栏对照模板" class="thumbnail-image"></span>
     
 </a>
 
@@ -402,7 +402,7 @@ ga('send', 'pageview');
                             <a href="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" class="thumbnail">
     
     
-        <span style="background-image:url(/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/logo.png)" alt="Android 响应式编程的未来展望：RxJava 2 版本前瞻" class="thumbnail-image"></span>
+        <span style="background-image:url(/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/thumbnail.jpg)" alt="Android 响应式编程的未来展望：RxJava 2 版本前瞻" class="thumbnail-image"></span>
     
 </a>
 
@@ -421,7 +421,7 @@ ga('send', 'pageview');
                             <a href="/2016/07/14/Black-box-test-using-Xposed/" class="thumbnail">
     
     
-        <span style="background-image:url(/2016/07/14/Black-box-test-using-Xposed/logo.png)" alt="使用 Xposed 进行黑盒测试" class="thumbnail-image"></span>
+        <span style="background-image:url(/2016/07/14/Black-box-test-using-Xposed/thumbnail.jpg)" alt="使用 Xposed 进行黑盒测试" class="thumbnail-image"></span>
     
 </a>
 
@@ -440,7 +440,7 @@ ga('send', 'pageview');
                             <a href="/2016/06/27/using-new-google-sheets-api/" class="thumbnail">
     
     
-        <span style="background-image:url(/2016/06/27/using-new-google-sheets-api/cover.png)" alt="【译】如何应用最新版的谷歌表格 API" class="thumbnail-image"></span>
+        <span style="background-image:url(/2016/06/27/using-new-google-sheets-api/thumbnail.jpg)" alt="【译】如何应用最新版的谷歌表格 API" class="thumbnail-image"></span>
     
 </a>
 
@@ -525,23 +525,14 @@ ga('send', 'pageview');
 </footer>
         
     
-    
-    <!-- 来必力City版安装代码 -->
-    <script type="text/javascript">
-     (function(d, s) {
-         var j, e = d.getElementsByTagName(s)[0];
-
-         if (typeof LivereTower === 'function') { return; }
-
-         j = d.createElement(s);
-         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-         j.async = true;
-
-         e.parentNode.insertBefore(j, e);
-     })(document, 'script');
+    <script>
+        window.VALINECONFIG = {
+            el: '#valine-thread' ,
+            app_secret: '7f7ac953577f4e4194d89fd02660fbdb',
+            app_key: 'kid_ByJwtpDYf',
+        };
     </script>
-  <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
-  <!-- City版安装代码已完成 -->
+    <script src="//cdn.jsdelivr.net/gh/Goshin/Valine-Kinvey@k-1.0.2/dist/Valine-loader.min.js"></script>
 
 
 

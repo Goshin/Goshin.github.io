@@ -12,12 +12,12 @@
 <meta property="og:url" content="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/index.html">
 <meta property="og:site_name" content="Goshin&#39;s Blog">
 <meta property="og:description" content="现在的 Android App 在编译发行时，一般都会混淆代码，或者加密保护 dex，虽然能够有效防止打包客反编译修改后重新发行，但也给我们个人学习 Dalvik 指令和理解程序逻辑带来了很大麻烦。在做静态分析时，面对茫茫一片混淆后无规则的类名，往往难以下手，只能停留在一些 APP 的常见入口，无法继续深入。 Xposed 是 Android 上非常有名的一个 hook 框架。通过 Xposed，">
-<meta property="og:image" content="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/logo.png">
-<meta property="og:updated_time" content="2018-01-19T11:31:26.128Z">
+<meta property="og:image" content="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/thumbnail.jpg">
+<meta property="og:updated_time" content="2018-03-15T10:51:31.277Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 Xposed 进行黑盒测试">
 <meta name="twitter:description" content="现在的 Android App 在编译发行时，一般都会混淆代码，或者加密保护 dex，虽然能够有效防止打包客反编译修改后重新发行，但也给我们个人学习 Dalvik 指令和理解程序逻辑带来了很大麻烦。在做静态分析时，面对茫茫一片混淆后无规则的类名，往往难以下手，只能停留在一些 APP 的常见入口，无法继续深入。 Xposed 是 Android 上非常有名的一个 hook 框架。通过 Xposed，">
-<meta name="twitter:image" content="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/logo.png">
+<meta name="twitter:image" content="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/thumbnail.jpg">
     
 
     
@@ -252,7 +252,7 @@ ga('send', 'pageview');
 
 </div>
 
-    <a data-url="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/" data-id="cjemsxq4a0004wjnktfxntia7" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/" data-id="cjerzpopl0000xankbamuy9zz" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -320,8 +320,6 @@ ga('send', 'pageview');
 
             
     
-        <a href="https://goshin.github.io/2016/07/14/Black-box-test-using-Xposed/#comments" class="article-comment-link">Comments</a>
-    
 
         </footer>
     </div>
@@ -354,9 +352,11 @@ ga('send', 'pageview');
     
     
         <section id="comments">
-    <div id="lv-container" data-id="city" data-uid=MTAyMC8zMzM4Mi85OTM4></div>
+    <div id="valine-thread"></div>
+
 </section>
     
+
 
 </section>
             
@@ -375,7 +375,7 @@ ga('send', 'pageview');
                             <a href="/2018/01/19/Bilingual-Template-in-Hexo/" class="thumbnail">
     
     
-        <span style="background-image:url(/2018/01/19/Bilingual-Template-in-Hexo/logo.png)" alt="Hexo 下实现双语双栏对照模板" class="thumbnail-image"></span>
+        <span style="background-image:url(/2018/01/19/Bilingual-Template-in-Hexo/thumbnail.jpg)" alt="Hexo 下实现双语双栏对照模板" class="thumbnail-image"></span>
     
 </a>
 
@@ -394,7 +394,7 @@ ga('send', 'pageview');
                             <a href="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" class="thumbnail">
     
     
-        <span style="background-image:url(/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/logo.png)" alt="Android 响应式编程的未来展望：RxJava 2 版本前瞻" class="thumbnail-image"></span>
+        <span style="background-image:url(/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/thumbnail.jpg)" alt="Android 响应式编程的未来展望：RxJava 2 版本前瞻" class="thumbnail-image"></span>
     
 </a>
 
@@ -413,7 +413,7 @@ ga('send', 'pageview');
                             <a href="/2016/07/14/Black-box-test-using-Xposed/" class="thumbnail">
     
     
-        <span style="background-image:url(/2016/07/14/Black-box-test-using-Xposed/logo.png)" alt="使用 Xposed 进行黑盒测试" class="thumbnail-image"></span>
+        <span style="background-image:url(/2016/07/14/Black-box-test-using-Xposed/thumbnail.jpg)" alt="使用 Xposed 进行黑盒测试" class="thumbnail-image"></span>
     
 </a>
 
@@ -432,7 +432,7 @@ ga('send', 'pageview');
                             <a href="/2016/06/27/using-new-google-sheets-api/" class="thumbnail">
     
     
-        <span style="background-image:url(/2016/06/27/using-new-google-sheets-api/cover.png)" alt="【译】如何应用最新版的谷歌表格 API" class="thumbnail-image"></span>
+        <span style="background-image:url(/2016/06/27/using-new-google-sheets-api/thumbnail.jpg)" alt="【译】如何应用最新版的谷歌表格 API" class="thumbnail-image"></span>
     
 </a>
 
@@ -517,23 +517,14 @@ ga('send', 'pageview');
 </footer>
         
     
-    
-    <!-- 来必力City版安装代码 -->
-    <script type="text/javascript">
-     (function(d, s) {
-         var j, e = d.getElementsByTagName(s)[0];
-
-         if (typeof LivereTower === 'function') { return; }
-
-         j = d.createElement(s);
-         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-         j.async = true;
-
-         e.parentNode.insertBefore(j, e);
-     })(document, 'script');
+    <script>
+        window.VALINECONFIG = {
+            el: '#valine-thread' ,
+            app_secret: '7f7ac953577f4e4194d89fd02660fbdb',
+            app_key: 'kid_ByJwtpDYf',
+        };
     </script>
-  <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
-  <!-- City版安装代码已完成 -->
+    <script src="//cdn.jsdelivr.net/gh/Goshin/Valine-Kinvey@k-1.0.2/dist/Valine-loader.min.js"></script>
 
 
 
