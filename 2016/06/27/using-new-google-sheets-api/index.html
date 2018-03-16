@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Goshin&#39;s Blog">
 <meta property="og:description" content="原文链接 : Using the new Google Sheets API 原文作者 : WESLEY CHUN 译文出自 : 掘金翻译计划 译者 : Goshin 校对者: warcryDoggie, jkjk77   引言本文将演示如何使用最新的 Google 表格 API. Google 在 2016 I/O 大会上发布了第四版的表格 API（博客，视频），与之前版本相比，新版增加了大">
 <meta property="og:image" content="https://goshin.github.io/2016/06/27/using-new-google-sheets-api/thumbnail.jpg">
-<meta property="og:updated_time" content="2018-03-15T10:51:18.861Z">
+<meta property="og:updated_time" content="2018-03-15T10:51:18.862Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【译】如何应用最新版的谷歌表格 API">
 <meta name="twitter:description" content="原文链接 : Using the new Google Sheets API 原文作者 : WESLEY CHUN 译文出自 : 掘金翻译计划 译者 : Goshin 校对者: warcryDoggie, jkjk77   引言本文将演示如何使用最新的 Google 表格 API. Google 在 2016 I/O 大会上发布了第四版的表格 API（博客，视频），与之前版本相比，新版增加了大">
@@ -32,8 +32,6 @@
 
     <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
     
-    
-        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
     
     
         <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
@@ -235,7 +233,7 @@ ga('send', 'pageview');
 <p>在之前的<a href="http://goo.gl/57Gufk" target="_blank" rel="noopener">几篇文章</a>中，我们已经介绍了 Google API 的结构和大致的使用说明，所以近期的文章会关注特定 API 在实际问题中的使用方法。如果你已经阅读过之前那篇，便可以从下面的授权范围开始，了解具体如何使用。</p>
 <a id="more"></a>
 <h2 id="Google-表格-API-授权认证及权限范围"><a href="#Google-表格-API-授权认证及权限范围" class="headerlink" title="Google 表格 API 授权认证及权限范围"></a>Google 表格 API 授权认证及权限范围</h2><p>之前版本的 Google Sheets API（早期名为 <a href="http://developers.google.com/google-apps/spreadsheets" target="_blank" rel="noopener">Google Spreadsheets  API</a>）作为 <a href="http://developers.google.com/gdata/docs/directory" target="_blank" rel="noopener">GData API 组</a> 的一部分，与其他 API 一起构建实现了较不安全的 <a href="http://developers.google.com/gdata" target="_blank" rel="noopener">Google Data (GData) 协议</a>，以一种 REST 驱动的技术方式读写网络中的信息。而新版表格 API 已成为 <a href="http://developers.google.com/api-client-library/python/apis" target="_blank" rel="noopener">Google APIs</a> 中的一员，使用 <a href="http://oauth.net/" target="_blank" rel="noopener">OAuth2</a> 方式认证，且利用 <a href="http://developers.google.com/discovery/libraries" target="_blank" rel="noopener">Google APIs 客户端库</a> 降低了使用难度。</p>
-<p>目前 API 提供<a href="https://developers.google.com/sheets/guides/authorizing#OAuth2Authorizing" target="_blank" rel="noopener">两种授权范围</a>：只读和读写。一般建议开发者根据用途尽量选择较多限制的授权范围。这样可以向用户请求较少的权限，用户更乐意一些，而且这样会令你的应用更加安全，防止可能的数据破坏，并可以预防流量及其他配额不经意地超出。在这个例子中我们需要创建表格并写入数据，所以<em>必须</em>选择『读写』授权。</p>
+<p>目前 API 提供<a href="https://developers.google.com/sheets/guides/authorizing#OAuth2Authorizing" target="_blank" rel="noopener">两种授权范围</a>：只读和读写。一般建议开发者根据用途尽量选择较多限制的授权范围。这样可以向用户请求较少的权限，用户更乐意一些，而且这样会令你的应用更加安全，防止可能的数据破坏，并可以预防流量及其他配额不经意地超出。在这个例子中我们需要创建表格并写入数据，所以_必须_选择『读写』授权。</p>
 <ul>
 <li><a href="https://www.googleapis.com/auth/spreadsheets" target="_blank" rel="noopener">参考文档 - 权限部分：读写表格数据及表格属性</a></li>
 </ul>
@@ -276,7 +274,7 @@ ga('send', 'pageview');
 
 </div>
 
-    <a data-url="https://goshin.github.io/2016/06/27/using-new-google-sheets-api/" data-id="cjerzpoqk0006xankq39xakvc" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://goshin.github.io/2016/06/27/using-new-google-sheets-api/" data-id="cjeu0b4ib0006m4nknxnay189" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -371,6 +369,20 @@ ga('send', 'pageview');
     
     
         <section id="comments">
+    <style>
+        @media screen and (min-width: 560px) {
+            .valine div.vwrap {
+                margin: -20px -20px 10px -20px;
+                padding: 20px;
+            }
+            #comments {
+                border-radius: 4px;
+            }
+        }
+        textarea.veditor.vinput {
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+        }
+    </style>
     <div id="valine-thread"></div>
 
 </section>
@@ -543,22 +555,12 @@ ga('send', 'pageview');
             app_key: 'kid_ByJwtpDYf',
         };
     </script>
-    <script src="//cdn.jsdelivr.net/gh/Goshin/Valine-Kinvey@k-1.0.2/dist/Valine-loader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/Goshin/Valine-Kinvey@k-1.0.3/dist/Valine-loader.min.js"></script>
 
 
 
 
 
-    
-        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
-        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
-        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
-        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
-        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
-        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
-        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
-        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
-        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
     
     
         <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
