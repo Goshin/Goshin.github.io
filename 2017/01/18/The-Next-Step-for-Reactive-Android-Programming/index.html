@@ -24,17 +24,17 @@
 
     
 
-    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/libs/open-sans/styles.css">
-    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/libs/source-code-pro/styles.css">
 
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/css/style.css">
 
-    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/libs/jquery/2.1.3/jquery.min.js"></script>
     
     
     
-        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/libs/justified-gallery/justifiedGallery.min.css">
     
     
         <script type="text/javascript">
@@ -88,7 +88,7 @@ ga('send', 'pageview');
             <div id="search-form-wrap">
 
     <form class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
         <button type="submit" class="search-form-submit"></button>
     </form>
     <div class="ins-search">
@@ -107,10 +107,10 @@ ga('send', 'pageview');
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: 'Posts',
+            POSTS: 'Entradas',
             PAGES: 'Pages',
-            CATEGORIES: 'Categories',
-            TAGS: 'Tags',
+            CATEGORIES: 'Categorias',
+            TAGS: 'Etiquetas',
             UNTITLED: '(Untitled)',
         },
         ROOT_URL: '/',
@@ -119,7 +119,7 @@ ga('send', 'pageview');
     window.INSIGHT_CONFIG = INSIGHT_CONFIG;
 })(window);
 </script>
-<script src="/js/insight.js"></script>
+<script src="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/js/insight.js"></script>
 
 </div>
         </div>
@@ -139,7 +139,7 @@ ga('send', 'pageview');
                 <td>
                     
     <div class="search-form">
-        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <input type="text" class="ins-search-input search-form-input" placeholder="Buscar" />
     </div>
 
                 </td>
@@ -159,16 +159,16 @@ ga('send', 'pageview');
             <h2 id="name">Goshin</h2>
             <h3 id="title">Android Developer</h3>
             <span id="location"><i class="fa fa-map-marker"></i>Canton, China</span>
-            <a id="follow" target="_blank" href="https://github.com/Goshin/">FOLLOW</a>
+            <a id="follow" target="_blank" href="https://github.com/Goshin/">SEGUIR</a>
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
                 4
-                <span>posts</span>
+                <span>Entradas</span>
             </div>
             <div class="article-info-block">
                 9
-                <span>tags</span>
+                <span>Etiquetas</span>
             </div>
         </div>
         
@@ -236,7 +236,7 @@ ga('send', 'pageview');
 <p>我们大多数人并不编写响应式编程库，但相同的 API 可以让我们能够同时使用不同的响应式编程库。</p>
 <p>其中一个例子就是 <a href="https://github.com/reactor/reactor-core" target="_blank" rel="noopener">Reactor 3</a> 库，这个库很像 RxJava。如果你是个 Android 开发者，可能没怎么跟它打过交道，因为它只支持 Java 8 及以上版本。</p>
 <p>但不管怎样，现在在这两个库之间转换响应流可以像下面这样简单：</p>
-<p><img src="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/rxjava_reactor.gif" alt=""></p>
+<p><img src="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/rxjava_reactor.gif" alt=""></p>
 <p>绿色代码是 RxJava 2，红色代码是 Reactor 3</p>
 <p>Reactor 3 相较 RxJava 2 有 10% 至 50% 的性能提升，但遗憾的是不能用在 Android 上。</p>
 <p>据我所知 RxJava 2 现在是唯一一个 Android 上支持响应流的库。也就是说，现如今为了响应流而使用 RxJava 2 意义并不大。</p>
@@ -254,7 +254,7 @@ ga('send', 'pageview');
 </li>
 </ul>
 <p>在实际情况中，在我们的应用中会遇到负载压力吗？我也很好奇，所以编写了一个调用加速度传感器的 Flowable 例子，读取传感器数据并显示在屏幕上。</p>
-<p><img src="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/accelerator.gif" alt="ezgif.com-resize.gif"></p>
+<p><img src="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/accelerator.gif" alt="ezgif.com-resize.gif"></p>
 <p>利用 Flowable 的加速度计</p>
 <p>这个 Android 加速度计每秒处理大概 50 次数据读取，而这种频率下的数据显示尚不足以发生负载过重的情况。当然这取决于响应式序列中的每个事件的处理负荷，但也足以说明负载压力并不会经常出现。</p>
 <h4 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h4><p>Observable 不支持负载压力处理，这意味着 Observable 不会抛出 MissingBackpressureException。如果消费者不能马上处理事件，事件会被缓存起来等待重新输入。</p>
@@ -284,7 +284,7 @@ ga('send', 'pageview');
 <p>注意以上方法数量的预估未考虑 Proguard 的压缩处理，所以实际中还可以省下几千个方法。</p>
 <p>如果你早已经超出了这个限制，则不用担心这个问题。</p>
 <p>但如果是十分接近的情况，则要在迁移过程中多加留意是否会超出 Dex 限制。</p>
-<h3 id="编写操作符"><a href="#编写操作符" class="headerlink" title="编写操作符"></a>编写操作符</h3><p><img src="/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/good_news.jpg" alt="good news.jpg"></p>
+<h3 id="编写操作符"><a href="#编写操作符" class="headerlink" title="编写操作符"></a>编写操作符</h3><p><img src="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/good_news.jpg" alt="good news.jpg"></p>
 <p>RxJava 现有的操作符（Operator）可能不能满足你的需要。要实现一些自定义的行为机制，你也许会考虑自己编写操作符。</p>
 <blockquote>
 <p>现在，给 RxJava 2.x 编写操作符要比给 1.x 编写难上 10 倍。</p>
@@ -312,7 +312,7 @@ ga('send', 'pageview');
 
 </div>
 
-    <a data-url="https://goshin.github.io/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" data-id="cjeu0b4id0007m4nktbjswlw4" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://goshin.github.io/2017/01/18/The-Next-Step-for-Reactive-Android-Programming/" data-id="cjfqryn1p0006x0nkq1d09k0z" class="article-share-link"><i class="fa fa-share"></i>Compartir</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -388,7 +388,7 @@ ga('send', 'pageview');
 <nav id="article-nav">
     
         <a href="/2018/01/19/Bilingual-Template-in-Hexo/" id="article-nav-newer" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Newer</strong>
+            <strong class="article-nav-caption">Más nuevo</strong>
             <div class="article-nav-title">
                 
                     Hexo 下实现双语双栏对照模板
@@ -398,7 +398,7 @@ ga('send', 'pageview');
     
     
         <a href="/2016/07/14/Black-box-test-using-Xposed/" id="article-nav-older" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">Older</strong>
+            <strong class="article-nav-caption">Más viejo</strong>
             <div class="article-nav-title">使用 Xposed 进行黑盒测试</div>
         </a>
     
@@ -439,7 +439,7 @@ ga('send', 'pageview');
    
         
     <div class="widget-wrap">
-        <h3 class="widget-title">recent</h3>
+        <h3 class="widget-title">Recientes</h3>
         <div class="widget">
             <ul id="recent-post" class="">
                 
@@ -526,7 +526,7 @@ ga('send', 'pageview');
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">categories</h3>
+        <h3 class="widget-title">Categorias</h3>
         <div class="widget">
             <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Front-End/">Front-End</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">1</span></li></ul>
         </div>
@@ -535,7 +535,7 @@ ga('send', 'pageview');
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">archives</h3>
+        <h3 class="widget-title">Archivos</h3>
         <div class="widget">
             <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a><span class="archive-list-count">1</span></li></ul>
         </div>
@@ -544,7 +544,7 @@ ga('send', 'pageview');
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tags</h3>
+        <h3 class="widget-title">Etiquetas</h3>
         <div class="widget">
             <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Front-End-Hexo/">Front-End, Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google/">Google</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google-API/">Google API</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google-Sheets/">Google Sheets</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Reactive/">Reactive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Xposed/">Xposed</a><span class="tag-list-count">1</span></li></ul>
         </div>
@@ -553,7 +553,7 @@ ga('send', 'pageview');
     
         
     <div class="widget-wrap">
-        <h3 class="widget-title">tag cloud</h3>
+        <h3 class="widget-title">Nube de etiquetas</h3>
         <div class="widget tagcloud">
             <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Front-End-Hexo/" style="font-size: 10px;">Front-End, Hexo</a> <a href="/tags/Google/" style="font-size: 10px;">Google</a> <a href="/tags/Google-API/" style="font-size: 10px;">Google API</a> <a href="/tags/Google-Sheets/" style="font-size: 10px;">Google Sheets</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Reactive/" style="font-size: 10px;">Reactive</a> <a href="/tags/Xposed/" style="font-size: 10px;">Xposed</a>
         </div>
@@ -562,7 +562,7 @@ ga('send', 'pageview');
     
         
     <div class="widget-wrap widget-list">
-        <h3 class="widget-title">links</h3>
+        <h3 class="widget-title">Links</h3>
         <div class="widget">
             <ul>
                 
@@ -606,14 +606,14 @@ ga('send', 'pageview');
 
     
     
-        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+        <script src="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
     
     
 
 
 
 <!-- Custom Scripts -->
-<script src="/js/main.js"></script>
+<script src="//cdn.jsdelivr.net/gh/Goshin/Goshin.github.io@4.8/js/main.js"></script>
 
     </div>
 </body>
