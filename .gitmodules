@@ -1,3 +1,4 @@
 [submodule "icarus"]
     path = themes/icarus
-    url = https://github.com/ppoffice/hexo-theme-icarus.git
+    url = https://github.com/Goshin/Goshin.github.io.git
+    branch = custom-theme

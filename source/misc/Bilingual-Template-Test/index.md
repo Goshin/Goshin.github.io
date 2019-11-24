@@ -2,7 +2,7 @@
 layout: bil-post
 title: Bilingual Template Test
 date: 2018-01-19 21:49:19
-thumbnail: /misc/Bilingual-Test/logo.png
+thumbnail: /misc/Bilingual-Template-Test/index/banner.png
 tags:
 ---
 
@@ -18,7 +18,7 @@ I have been using Firebug as my debugging tool since I started web development. 
 
 ### Ways of get a DOM node
 
-Besides using the magnifier to select the DOM node on the web page, you can use the jQuery style of getting the DOM node with “$” sign. For example, $(“#name”) will give you the DOM node with id as name. If you select a DOM node in the Elements tab, you can then type in “$0″ in the Console tab to get the DOM node. On the other hand, you can type “inspect($0)” in the Console tab to show the DOM node in the Element tab.
+<span class="tex2jax_ignore">Besides using the magnifier to select the DOM node on the web page, you can use the jQuery style of getting the DOM node with “&dollar;” sign. For example, &dollar;(“#name”) will give you the DOM node with id as name. If you select a DOM node in the Elements tab, you can then type in “&dollar;0″ in the Console tab to get the DOM node. On the other hand, you can type “inspect(&dollar;0)” in the Console tab to show the DOM node in the Element tab.</span>
 
 ### Show style for different states
 
@@ -59,7 +59,7 @@ Above are just new things that I learned in the class and I enjoyed taking this 
 
 ### 获得DOM节点的方法
 
-除了可以通过使用放大器在网页中直接选取DOM节点外，你还可以使用jQuery风格的“$”来获得想要的DOM节点。例如，$(“#name”)将会获得id为name的DOM节点。如果你在元素标签中选择了一个DOM节点，你就可以在控制台标签中键入“$0″来获得该DOM节点。另一方面，你在控制台标签中键入“inspect($0)”，就可以转到显示该节点的元素标签中了。
+<span class="tex2jax_ignore">除了可以通过使用放大器在网页中直接选取DOM节点外，你还可以使用jQuery风格的“$”来获得想要的DOM节点。例如，$(“#name”)将会获得id为name的DOM节点。如果你在元素标签中选择了一个DOM节点，你就可以在控制台标签中键入“$0″来获得该DOM节点。另一方面，你在控制台标签中键入“inspect($0)”，就可以转到显示该节点的元素标签中了。</span>
 
 ### 显示不同状态的样式
 
